@@ -4,7 +4,8 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - Platform
+  - BounceBlock
+  - "\uD759\uBE14\uB85D"
   layers:
   - Default
   - TransparentFX

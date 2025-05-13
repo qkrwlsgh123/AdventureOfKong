@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class BallBounceScript : MonoBehaviour
 {
-    public float bounceForce = 10f;
-
     private Rigidbody2D rb;
 
     void Start()
@@ -13,10 +11,15 @@ public class BallBounceScript : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        // �ٴ��̳� ���ǿ� ����� ���� ƨ���
-        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Platform"))
+        // 태그가 BounceBlock인 오브젝트에 닿았는지 확인
+        if (collision.gameObject.CompareTag("BounceBlock"))
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, bounceForce);
+            BounceSurface surface = collision.gameObject.GetComponent<BounceSurface>();
+            if (surface != null)
+            {
+                float force = surface.GetBounceForce();
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, force);
+            }
         }
     }
 }
