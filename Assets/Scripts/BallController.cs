@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// 방향키로 Ball을 좌우로 움직이는 스크립트
+/// 방향키로 Ball을 좌우로 움직이는 스크립트 + 물에서 점프 금지
 /// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
 public class BallController : MonoBehaviour
@@ -9,11 +9,19 @@ public class BallController : MonoBehaviour
     [Tooltip("좌우 이동 속도")]
     public float speed = 5f;
 
+    [Tooltip("점프 파워")]
+    public float jumpPower = 10f;
+
     private Rigidbody2D rb;
+
+    // 물에 있는지 여부
+    public bool isInWater = false;
+
+    // 땅에 닿아 있는지 여부
+    private bool isGrounded = false;
 
     void Awake()
     {
-        // Rigidbody2D 컴포넌트 가져오기
         rb = GetComponent<Rigidbody2D>();
         if (rb == null)
         {
@@ -31,5 +39,50 @@ public class BallController : MonoBehaviour
         Vector2 velocity = rb.linearVelocity;
         velocity.x = input * speed;
         rb.linearVelocity = velocity;
+
+        // 점프 처리: 물 안이 아니고, 땅에 닿아 있을 때만 점프 가능
+        if (!isInWater && isGrounded && Input.GetKeyDown(KeyCode.Space))
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpPower);
+        }
+    }
+
+    // 물에 들어갔을 때 (Trigger 진입)
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        Debug.Log("트리거 감지됨: " + other.name);
+
+        if (other.CompareTag("Water"))
+        {
+            Debug.Log("Water 태그 감지됨");
+            isInWater = true;
+        }
+    }
+
+    // 물에서 나왔을 때 (Trigger 벗어남)
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Water"))
+        {
+            isInWater = false;
+        }
+    }
+
+    // 땅에 닿았을 때
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("BounceBlock"))
+        {
+            isGrounded = true;
+        }
+    }
+
+    // 땅에서 떨어졌을 때
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("BounceBlock"))
+        {
+            isGrounded = false;
+        }
     }
 }
