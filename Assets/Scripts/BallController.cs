@@ -1,22 +1,17 @@
 using UnityEngine;
 
-/// <summary>
-/// 자동 점프 / 물 안에서는 점프 금지 + 자연스러운 하강 후 바닥 고정
-/// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
 public class BallController : MonoBehaviour
 {
     [Tooltip("좌우 이동 속도")]
-    public float speed = 5f;
-
+    public float speed = 3f;
     [Tooltip("점프 파워")]
-    public float jumpPower = 1.5f;
+    public float jumpPower = 6f;
 
     private Rigidbody2D rb;
-
-    public bool isInWater = false;
-    private bool isGrounded = false;
+    private bool isInWater = false;
     private bool isOnWaterBottom = false;
+    private bool isGrounded = false;
 
     void Awake()
     {
@@ -25,11 +20,9 @@ public class BallController : MonoBehaviour
 
     void Update()
     {
-        // 좌우 이동은 항상 가능
+        // 좌우 이동
         float input = Input.GetAxis("Horizontal");
-        Vector2 velocity = rb.linearVelocity;
-        velocity.x = input * speed;
-        rb.linearVelocity = velocity;
+        rb.linearVelocity = new Vector2(input * speed, rb.linearVelocity.y);
     }
 
     void FixedUpdate()
@@ -37,17 +30,12 @@ public class BallController : MonoBehaviour
         if (isInWater)
         {
             rb.gravityScale = 1;
-
-            // 물 안에 있고 바닥에 닿아 있을 때만 y속도 제거 → 바닥에 붙이기
             if (isOnWaterBottom)
-            {
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);
-            }
         }
         else
         {
             rb.gravityScale = 1;
-
             if (isGrounded)
             {
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpPower);
@@ -56,13 +44,11 @@ public class BallController : MonoBehaviour
         }
     }
 
-    // 물 감지
-    void OnTriggerStay2D(Collider2D other)
+    // 물블록 입수 감지
+    void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("물블록"))
-        {
             isInWater = true;
-        }
     }
 
     void OnTriggerExit2D(Collider2D other)
@@ -74,34 +60,36 @@ public class BallController : MonoBehaviour
         }
     }
 
-    // 바닥 감지 (흙 or Bounce or 물바닥 위에 닿은 상태 확인)
+    // 흙블록 또는 BounceBlock에 부딪힐 때
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("흙블록") || collision.gameObject.CompareTag("BounceBlock"))
+        if (collision.gameObject.CompareTag("흙블록") ||
+            collision.gameObject.CompareTag("BounceBlock"))
         {
-            if (isInWater)
+            // 블록 콜라이더 bounds 가져오기
+            Collider2D blockCol = collision.collider;
+            Bounds bounds = blockCol.bounds;
+
+            foreach (ContactPoint2D contact in collision.contacts)
             {
-                isOnWaterBottom = true;
-            }
-            else
-            {
-                isGrounded = true;
+                // 충돌 지점 y 좌표가 블록 상단(bounds.max.y)에 가까울 때만
+                if (contact.point.y >= bounds.max.y - 0.01f)
+                {
+                    if (isInWater) isOnWaterBottom = true;
+                    else isGrounded = true;
+                    break;
+                }
             }
         }
     }
 
     void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("흙블록") || collision.gameObject.CompareTag("BounceBlock"))
+        if (collision.gameObject.CompareTag("흙블록") ||
+            collision.gameObject.CompareTag("BounceBlock"))
         {
-            if (isInWater)
-            {
-                isOnWaterBottom = false;
-            }
-            else
-            {
-                isGrounded = false;
-            }
+            if (isInWater) isOnWaterBottom = false;
+            else isGrounded = false;
         }
     }
 }

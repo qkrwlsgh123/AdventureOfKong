@@ -5,9 +5,8 @@ TagManager:
   serializedVersion: 3
   tags:
   - BounceBlock
-  - "\uD759\uBE14\uB85D"
   - "\uBB3C\uBE14\uB85D"
-  - water
+  - GroundTop
   layers:
   - Default
   - TransparentFX
