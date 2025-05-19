@@ -7,6 +7,8 @@ TagManager:
   - BounceBlock
   - "\uBB3C\uBE14\uB85D"
   - GroundTop
+  - WaterBottom
+  - TriangleBlock
   layers:
   - Default
   - TransparentFX
