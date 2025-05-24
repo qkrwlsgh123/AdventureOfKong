@@ -1,53 +1,79 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.Collections;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
 public class BallController : MonoBehaviour
 {
-    [Tooltip("좌우 이동 속도")]
+    [Header("이동/점프 설정")]
     public float speed = 3f;
-    [Tooltip("점프 파워")]
     public float jumpPower = 6f;
 
-    private Rigidbody2D rb;
-    private Collider2D ballCol;
-    private bool isInWater = false;
-    private bool isOnWaterBottom = false;
-    private bool isGrounded = false;
+    [Header("성장 설정")]
+    public float growthInterval = 2f;     // 성장 간격 (초)
+    public Sprite[] growthSprites;        // 1~7단계 스프라이트 배열
+    public SpriteRenderer growthRenderer; // GrowthVisual의 SpriteRenderer
+    [Range(0f, 1f)] public float minSpeedFactor = 0.5f;
+    [Range(0f, 1f)] public float minJumpFactor = 0.5f;
+
+    [Header("Game Over UI")]
+    public GameOverUIScript gameOverUI;
+
+    Rigidbody2D rb;
+    bool isOnWaterBottom = false;
+    bool isGrounded = false;
+
+    int waterContactCount = 0;
+    bool isInWater { get { return waterContactCount > 0; } }
+
+    float waterTimer = 0f;
+    int growthStage = 0;    // 0:씨앗, 1~7:성장단계
+    float initialSpeed, initialJump;
+
+    bool isDead = false;       // 완전 성장(7단계) 시 true
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        ballCol = GetComponent<Collider2D>();
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        initialSpeed = speed;
+        initialJump = jumpPower;
+        UpdateGrowthVisual();
     }
 
     void Update()
     {
+        if (isDead) return;  // 죽으면 더 이상 이동이나 성장 타이머 진행 안 함
+
+        // 좌우 이동
         float h = Input.GetAxis("Horizontal");
-        Vector2 v = rb.linearVelocity;
-        v.x = h * speed;
-        rb.linearVelocity = v;
+        rb.linearVelocity = new Vector2(h * speed, rb.linearVelocity.y);
+
+        // 물속 성장 타이머
+        if (isInWater && growthStage < 7)
+        {
+            waterTimer += Time.deltaTime;
+            if (waterTimer >= growthInterval)
+            {
+                waterTimer -= growthInterval;
+                GrowOneStage();
+            }
+        }
     }
 
     void FixedUpdate()
     {
+        if (isDead) return;
+
         if (isInWater)
         {
             if (isOnWaterBottom)
-            {
-                // 물바닥 위에서는 수직 속도만 0으로 고정
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);
-            }
             else
-            {
-                // 물 안에 떠 있을 때
                 rb.gravityScale = 1;
-                rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-            }
         }
         else
         {
-            // 물 밖일 때
             rb.gravityScale = 1;
             rb.constraints = RigidbodyConstraints2D.FreezeRotation;
             if (isGrounded)
@@ -61,88 +87,137 @@ public class BallController : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("물블록"))
-            isInWater = true;
+        {
+            waterContactCount++;
+            if (waterContactCount == 1)
+                waterTimer = 0f;
+        }
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
         if (other.CompareTag("물블록"))
         {
-            isInWater = false;
-            isOnWaterBottom = false;
-            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-        }
-    }
-
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        // 1) 물속 & 물바닥 고정
-        if (isInWater && collision.gameObject.CompareTag("WaterBottom"))
-        {
-            isOnWaterBottom = true;
-            rb.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
-            rb.gravityScale = 0;
-            return;
-        }
-
-        // 2) 삼각형블록 처리
-        if (collision.gameObject.CompareTag("TriangleBlock"))
-        {
-            if (isInWater)
+            waterContactCount--;
+            if (waterContactCount <= 0)
             {
-                // 물속이었으면 물속 상태 해제하고 그대로 경사 타게
-                isInWater = false;
+                waterContactCount = 0;
                 isOnWaterBottom = false;
                 rb.constraints = RigidbodyConstraints2D.FreezeRotation;
                 rb.gravityScale = 1;
             }
-            else
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        if (isDead) return;
+
+        if (isInWater)
+        {
+            if (col.gameObject.CompareTag("WaterBottom"))
             {
-                // 물 밖에서는 빗면에서만 점프
-                foreach (var contact in collision.contacts)
-                {
-                    if (contact.normal.y > 0.1f && Mathf.Abs(contact.normal.x) > 0.1f)
+                isOnWaterBottom = true;
+                rb.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+                rb.gravityScale = 0;
+                return;
+            }
+            if (col.gameObject.CompareTag("TriangleBlock"))
+            {
+                isOnWaterBottom = false;
+                rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+                rb.gravityScale = 1;
+                return;
+            }
+        }
+        else
+        {
+            if (col.gameObject.CompareTag("TriangleBlock"))
+            {
+                foreach (var ct in col.contacts)
+                    if (ct.normal.y > 0.1f && Mathf.Abs(ct.normal.x) > 0.1f)
                     {
                         isGrounded = true;
                         break;
                     }
-                }
+                return;
             }
-            return;
-        }
-
-        // 3) 물 밖 일반 지면(BounceBlock/흙블록) 윗면만 점프
-        if (!isInWater &&
-           (collision.gameObject.CompareTag("흙블록") ||
-            collision.gameObject.CompareTag("BounceBlock")))
-        {
-            Bounds b = collision.collider.bounds;
-            foreach (var contact in collision.contacts)
+            if (col.gameObject.CompareTag("흙블록") || col.gameObject.CompareTag("BounceBlock"))
             {
-                if (contact.point.y >= b.max.y - 0.01f)
-                {
-                    isGrounded = true;
-                    break;
-                }
+                Bounds b = col.collider.bounds;
+                foreach (var ct in col.contacts)
+                    if (ct.point.y >= b.max.y - 0.01f)
+                    {
+                        isGrounded = true;
+                        break;
+                    }
             }
         }
     }
 
-    void OnCollisionExit2D(Collision2D collision)
+    void OnCollisionStay2D(Collision2D col)
     {
-        // 물속 바닥에서 벗어날 때
-        if (isInWater && collision.gameObject.CompareTag("WaterBottom"))
+        if (isDead) return;
+        // 삼각형블록 위에도 물속 상태 유지
+        if (col.gameObject.CompareTag("TriangleBlock"))
+            waterContactCount = Mathf.Max(waterContactCount, 1);
+    }
+
+    void OnCollisionExit2D(Collision2D col)
+    {
+        if (isDead) return;
+        if (isInWater && col.gameObject.CompareTag("WaterBottom"))
         {
             isOnWaterBottom = false;
             rb.constraints = RigidbodyConstraints2D.FreezeRotation;
             rb.gravityScale = 1;
         }
-        // 물 밖 지면/튕기는 블록에서 벗어날 때
         else if (!isInWater &&
-                (collision.gameObject.CompareTag("흙블록") ||
-                 collision.gameObject.CompareTag("BounceBlock")))
+                (col.gameObject.CompareTag("흙블록") ||
+                 col.gameObject.CompareTag("BounceBlock") ||
+                 col.gameObject.CompareTag("TriangleBlock")))
         {
             isGrounded = false;
         }
+    }
+
+    void GrowOneStage()
+    {
+        growthStage++;
+        UpdateGrowthVisual();
+
+        // 속도·점프력 감소
+        float t = Mathf.Clamp01((growthStage - 1) / 5f);
+        speed = Mathf.Lerp(initialSpeed, initialSpeed * minSpeedFactor, t);
+        jumpPower = Mathf.Lerp(initialJump, initialJump * minJumpFactor, t);
+
+        if (growthStage >= 7)
+        {
+            BeginDeathByGrowth();
+        }
+    }
+
+    private void BeginDeathByGrowth()
+    {
+        // 완전 성장 시 점프/이동 차단
+        isDead = true;
+        rb.linearVelocity = Vector2.zero;
+        rb.gravityScale = 0;
+        // 1초 뒤에 GameOver 호출
+        StartCoroutine(DelayedGameOver());
+    }
+
+    private IEnumerator DelayedGameOver()
+    {
+        yield return new WaitForSeconds(1f);
+        if (gameOverUI != null)
+            gameOverUI.ShowGameOver();
+    }
+
+    void UpdateGrowthVisual()
+    {
+        if (growthRenderer == null || growthSprites == null || growthStage == 0) return;
+        int idx = Mathf.Clamp(growthStage - 1, 0, growthSprites.Length - 1);
+        growthRenderer.sprite = growthSprites[idx];
     }
 }
