@@ -12,7 +12,7 @@ public class HealthDisplay : MonoBehaviour
 
     void Update()
     {
-        int hp = player.CurrentHealth;  // 이제 정확히 3부터 시작합니다
+        int hp = player.CurrentHealth;  // 이제 3부터 시작
         for (int i = 0; i < hearts.Count; i++)
         {
             hearts[i].gameObject.SetActive(i < hp);

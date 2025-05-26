@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
 public class BallController : MonoBehaviour
@@ -10,40 +11,37 @@ public class BallController : MonoBehaviour
     public float jumpPower = 6f;
 
     [Header("성장 설정")]
-    public float growthInterval = 2f;      // 물속 자동 성장 주기
-    public Sprite[] growthSprites;         // 1~7단계 스프라이트
-    public SpriteRenderer growthRenderer;  // 비주얼용 SpriteRenderer
+    public float growthInterval = 2f;
+    public Sprite[] growthSprites;
+    public SpriteRenderer growthRenderer;
     [Range(0f, 1f)] public float minSpeedFactor = 0.667f;
     [Range(0f, 1f)] public float minJumpFactor = 0.667f;
 
     [Header("Health 설정")]
-    public int baseHealth = 3;             // 기본 체력
-    private int maxHealth;                 // 최대 체력 (base + growthStage)
-    private int currentHealth;             // 현재 체력
+    public int baseHealth = 3;
+    private int maxHealth;
+    private int currentHealth;
 
     [Header("Game Over UI")]
     public GameOverUIScript gameOverUI;
 
-    // 물리·상태
+    // 내부 상태
     Rigidbody2D rb;
     bool isGrounded = false;
     bool isOnWaterBottom = false;
     bool isDead = false;
 
-    int waterContactCount = 0;          // 물 트리거 개수
-    bool waterEverContact = false;      // 한 번이라도 물에 닿았는지
+    int waterContactCount = 0;
+    bool waterEverContact = false;
     bool isInWater { get { return waterContactCount > 0; } }
 
     float waterTimer = 0f;
     int growthStage = 0;
     float initialSpeed, initialJump;
 
-    // 태양블록 한 접촉당 한 번만 처리
     private bool sunHitProcessed = false;
+    private HashSet<GameObject> bugTouched = new HashSet<GameObject>();
 
-    /// <summary>
-    /// 외부에서 현재 체력을 읽어오는 프로퍼티
-    /// </summary>
     public int CurrentHealth { get { return currentHealth; } }
 
     void Awake()
@@ -54,7 +52,6 @@ public class BallController : MonoBehaviour
         initialSpeed = speed;
         initialJump = jumpPower;
 
-        // 체력 초기화
         maxHealth = baseHealth + growthStage;
         currentHealth = maxHealth;
 
@@ -109,11 +106,9 @@ public class BallController : MonoBehaviour
         growthStage++;
         UpdateGrowthVisual();
 
-        // 최대 체력 증가, 현재 체력은 +1 회복(최대치까지)
         maxHealth = baseHealth + growthStage;
         currentHealth = Mathf.Min(currentHealth + 1, maxHealth);
 
-        // 속도·점프력 보간
         float t = Mathf.Clamp01((growthStage - 1) / 5f);
         speed = Mathf.Lerp(initialSpeed, initialSpeed * minSpeedFactor, t);
         jumpPower = Mathf.Lerp(initialJump, initialJump * minJumpFactor, t);
@@ -158,14 +153,24 @@ public class BallController : MonoBehaviour
     {
         if (isDead) return;
 
-        // 태양블록 접촉: 한 번만 1단계 성장
+        // 벌레블록 처리
+        if (col.gameObject.GetComponent<BugBlockDamage>() != null &&
+            !bugTouched.Contains(col.gameObject))
+        {
+            bugTouched.Add(col.gameObject);
+            TakeDamage();
+        }
+
+        // 태양블록 처리
         if (!sunHitProcessed &&
             col.gameObject.CompareTag("BounceBlock") &&
             col.gameObject.name == "태양블록" &&
             growthStage < 7)
         {
             sunHitProcessed = true;
-            GrowOneStage();
+            int steps = waterEverContact ? 2 : 1;
+            for (int i = 0; i < steps && growthStage < 7; i++)
+                GrowOneStage();
             return;
         }
 
@@ -179,7 +184,7 @@ public class BallController : MonoBehaviour
             return;
         }
 
-        // 물속 슬로프 미끄러짐
+        // 물속 슬로프
         if (isInWater && col.gameObject.CompareTag("TriangleBlock"))
         {
             isOnWaterBottom = false;
@@ -200,28 +205,36 @@ public class BallController : MonoBehaviour
             return;
         }
 
-        // 물밖 지면/튕기는 블록 윗면 점프
+        // *** 일반/튕기는 블록 윗면 점프 수정 부분 ***
         if (!isInWater &&
            (col.gameObject.CompareTag("흙블록") ||
             col.gameObject.CompareTag("BounceBlock")))
         {
             Bounds b = col.collider.bounds;
             foreach (var ct in col.contacts)
-                if (ct.point.y >= b.max.y - 0.01f)
+            {
+                // 이제 접촉 노멀과 위치를 모두 검사합니다
+                if (ct.normal.y > 0.5f && ct.point.y >= b.max.y - 0.01f)
                 {
                     isGrounded = true;
                     break;
                 }
+            }
         }
     }
 
     void OnCollisionExit2D(Collision2D col)
     {
-        // 태양블록과 분리되면 다음 접촉 허용
+        // 태양블록 리셋
         if (col.gameObject.CompareTag("BounceBlock") &&
             col.gameObject.name == "태양블록")
         {
             sunHitProcessed = false;
+        }
+        // 벌레블록 리셋
+        if (col.gameObject.GetComponent<BugBlockDamage>() != null)
+        {
+            bugTouched.Remove(col.gameObject);
         }
 
         if (isInWater && col.gameObject.CompareTag("WaterBottom"))

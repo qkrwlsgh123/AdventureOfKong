@@ -1,16 +1,8 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Collider2D))]
+// Marker 컴포넌트: 이 스크립트 유무로 벌레블록을 판별합니다.
+// 데미지는 오직 BallController 쪽에서만 TakeDamage() 호출합니다.
 public class BugBlockDamage : MonoBehaviour
 {
-    void OnCollisionEnter2D(Collision2D other)
-    {
-        // Player 태그가 붙은 오브젝트에만 데미지
-        if (other.gameObject.CompareTag("Player"))
-        {
-            var ball = other.gameObject.GetComponent<BallController>();
-            if (ball != null)
-                ball.TakeDamage();
-        }
-    }
+    // 빈 클래스로 둡니다.
 }
