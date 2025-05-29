@@ -25,6 +25,9 @@ public class BallController : MonoBehaviour
     [Header("Game Over UI")]
     public GameOverUIScript gameOverUI;
 
+    [Header("물방울 이펙트 프리팹")]
+    public GameObject splashEffectPrefab; // 💧 물에 들어갈 때 사용할 물방울 이펙트 프리팹
+
     // 내부 상태
     Rigidbody2D rb;
     bool isGrounded = false;
@@ -62,11 +65,9 @@ public class BallController : MonoBehaviour
     {
         if (isDead) return;
 
-        // 좌우 이동
         float h = Input.GetAxis("Horizontal");
         rb.linearVelocity = new Vector2(h * speed, rb.linearVelocity.y);
 
-        // 물속 자동 성장
         if (isInWater && growthStage < 7)
         {
             waterTimer += Time.deltaTime;
@@ -137,6 +138,14 @@ public class BallController : MonoBehaviour
             waterContactCount++;
             if (waterContactCount == 1) waterTimer = 0f;
             waterEverContact = true;
+
+            // 💧 물방울 튀는 효과 생성
+            if (splashEffectPrefab != null)
+            {
+                Vector3 splashPosition = transform.position + new Vector3(0f, 0f, 0f);
+                GameObject splash = Instantiate(splashEffectPrefab, splashPosition, Quaternion.identity);
+                Destroy(splash, 0.5f); // 0.5초 뒤 자동 제거
+            }
         }
     }
 
@@ -153,7 +162,6 @@ public class BallController : MonoBehaviour
     {
         if (isDead) return;
 
-        // 벌레블록 처리
         if (col.gameObject.GetComponent<BugBlockDamage>() != null &&
             !bugTouched.Contains(col.gameObject))
         {
@@ -161,7 +169,6 @@ public class BallController : MonoBehaviour
             TakeDamage();
         }
 
-        // 태양블록 처리
         if (!sunHitProcessed &&
             col.gameObject.CompareTag("BounceBlock") &&
             col.gameObject.name == "태양블록" &&
@@ -174,7 +181,6 @@ public class BallController : MonoBehaviour
             return;
         }
 
-        // 물속 바닥 고정
         if (isInWater && col.gameObject.CompareTag("WaterBottom"))
         {
             isOnWaterBottom = true;
@@ -184,7 +190,6 @@ public class BallController : MonoBehaviour
             return;
         }
 
-        // 물속 슬로프
         if (isInWater && col.gameObject.CompareTag("TriangleBlock"))
         {
             isOnWaterBottom = false;
@@ -193,7 +198,6 @@ public class BallController : MonoBehaviour
             return;
         }
 
-        // 물밖 슬로프 점프
         if (!isInWater && col.gameObject.CompareTag("TriangleBlock"))
         {
             foreach (var ct in col.contacts)
@@ -205,7 +209,6 @@ public class BallController : MonoBehaviour
             return;
         }
 
-        // *** 일반/튕기는 블록 윗면 점프 수정 부분 ***
         if (!isInWater &&
            (col.gameObject.CompareTag("흙블록") ||
             col.gameObject.CompareTag("BounceBlock")))
@@ -213,7 +216,6 @@ public class BallController : MonoBehaviour
             Bounds b = col.collider.bounds;
             foreach (var ct in col.contacts)
             {
-                // 이제 접촉 노멀과 위치를 모두 검사합니다
                 if (ct.normal.y > 0.5f && ct.point.y >= b.max.y - 0.01f)
                 {
                     isGrounded = true;
@@ -225,13 +227,12 @@ public class BallController : MonoBehaviour
 
     void OnCollisionExit2D(Collision2D col)
     {
-        // 태양블록 리셋
         if (col.gameObject.CompareTag("BounceBlock") &&
             col.gameObject.name == "태양블록")
         {
             sunHitProcessed = false;
         }
-        // 벌레블록 리셋
+
         if (col.gameObject.GetComponent<BugBlockDamage>() != null)
         {
             bugTouched.Remove(col.gameObject);
