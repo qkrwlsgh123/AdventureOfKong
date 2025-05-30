@@ -25,11 +25,18 @@ public class BallController : MonoBehaviour
     [Header("Game Over UI")]
     public GameOverUIScript gameOverUI;
 
-    [Header("물방울 이펙트 프리팹")]
-    public GameObject splashEffectPrefab; // 💧 물에 들어갈 때 사용할 물방울 이펙트 프리팹
+    [Header("물 이펙트 설정")]
+    public GameObject splashEffectPrefab;
+    public AudioClip waterSplashSound;
 
-    // 내부 상태
+    [Header("사운드 설정")]
+    public AudioClip jumpSound;
+    public AudioClip growSound;
+    public AudioClip bugBiteSound;
+
     Rigidbody2D rb;
+    AudioSource audioSource;
+
     bool isGrounded = false;
     bool isOnWaterBottom = false;
     bool isDead = false;
@@ -50,6 +57,7 @@ public class BallController : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        audioSource = GetComponent<AudioSource>();
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
 
         initialSpeed = speed;
@@ -94,8 +102,12 @@ public class BallController : MonoBehaviour
         {
             rb.gravityScale = 1;
             rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+
             if (isGrounded)
             {
+                if (jumpSound != null && audioSource != null)
+                    audioSource.PlayOneShot(jumpSound);
+
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpPower);
                 isGrounded = false;
             }
@@ -114,6 +126,9 @@ public class BallController : MonoBehaviour
         speed = Mathf.Lerp(initialSpeed, initialSpeed * minSpeedFactor, t);
         jumpPower = Mathf.Lerp(initialJump, initialJump * minJumpFactor, t);
 
+        if (growSound != null && audioSource != null)
+            audioSource.PlayOneShot(growSound);
+
         if (growthStage >= 7)
             BeginDeathByGrowth();
     }
@@ -123,6 +138,10 @@ public class BallController : MonoBehaviour
         if (isDead) return;
 
         currentHealth--;
+
+        if (bugBiteSound != null && audioSource != null)
+            audioSource.PlayOneShot(bugBiteSound);
+
         Debug.Log($"[Damage] Health = {currentHealth}/{maxHealth}");
         if (currentHealth <= 0)
         {
@@ -136,15 +155,20 @@ public class BallController : MonoBehaviour
         if (other.CompareTag("물블록"))
         {
             waterContactCount++;
-            if (waterContactCount == 1) waterTimer = 0f;
-            waterEverContact = true;
-
-            // 💧 물방울 튀는 효과 생성
-            if (splashEffectPrefab != null)
+            if (waterContactCount == 1)
             {
-                Vector3 splashPosition = transform.position + new Vector3(0f, 0f, 0f);
-                GameObject splash = Instantiate(splashEffectPrefab, splashPosition, Quaternion.identity);
-                Destroy(splash, 0.5f); // 0.5초 뒤 자동 제거
+                waterTimer = 0f;
+                waterEverContact = true;
+
+                if (splashEffectPrefab != null)
+                {
+                    Vector3 splashPosition = transform.position + new Vector3(0f, 0.2f, 0f);
+                    GameObject splash = Instantiate(splashEffectPrefab, splashPosition, Quaternion.identity);
+                    Destroy(splash, 0.5f);
+                }
+
+                if (waterSplashSound != null && audioSource != null)
+                    audioSource.PlayOneShot(waterSplashSound);
             }
         }
     }
@@ -184,8 +208,7 @@ public class BallController : MonoBehaviour
         if (isInWater && col.gameObject.CompareTag("WaterBottom"))
         {
             isOnWaterBottom = true;
-            rb.constraints = RigidbodyConstraints2D.FreezePositionY
-                            | RigidbodyConstraints2D.FreezeRotation;
+            rb.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
             rb.gravityScale = 0;
             return;
         }
@@ -244,6 +267,7 @@ public class BallController : MonoBehaviour
             rb.constraints = RigidbodyConstraints2D.FreezeRotation;
             rb.gravityScale = 1;
         }
+
         if (!isInWater &&
            (col.gameObject.CompareTag("흙블록") ||
             col.gameObject.CompareTag("BounceBlock") ||
