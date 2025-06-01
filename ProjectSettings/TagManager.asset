@@ -9,6 +9,8 @@ TagManager:
   - GroundTop
   - WaterBottom
   - TriangleBlock
+  - Poop
+  - DeathZone
   layers:
   - Default
   - TransparentFX

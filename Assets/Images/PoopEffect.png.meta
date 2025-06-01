@@ -1,0 +1,676 @@
+fileFormatVersion: 2
+guid: 1498bc20e477fc147ad4c389afd0533b
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2827745616893808690
+    second: PoopEffect_0
+  - first:
+      213: 4453553028873921559
+    second: PoopEffect_1
+  - first:
+      213: -6494718032314872361
+    second: PoopEffect_2
+  - first:
+      213: -594297723197404961
+    second: PoopEffect_3
+  - first:
+      213: 617450957008462358
+    second: PoopEffect_4
+  - first:
+      213: -807882695048722289
+    second: PoopEffect_5
+  - first:
+      213: 6790491579955401683
+    second: PoopEffect_6
+  - first:
+      213: 8740267503268067959
+    second: PoopEffect_7
+  - first:
+      213: 8707410260628642085
+    second: PoopEffect_8
+  - first:
+      213: 9088472904106501055
+    second: PoopEffect_9
+  - first:
+      213: -6457028208802907248
+    second: PoopEffect_10
+  - first:
+      213: -3453957981908633549
+    second: PoopEffect_11
+  - first:
+      213: 2054281467354739259
+    second: PoopEffect_12
+  - first:
+      213: -8612441271427774815
+    second: PoopEffect_13
+  - first:
+      213: -1151726893020640362
+    second: PoopEffect_14
+  - first:
+      213: -6946518416368699956
+    second: PoopEffect_15
+  - first:
+      213: 4376375946150243463
+    second: PoopEffect_16
+  - first:
+      213: 257795466957753587
+    second: PoopEffect_17
+  - first:
+      213: 1102055206639703278
+    second: PoopEffect_18
+  - first:
+      213: 3734150100685623176
+    second: PoopEffect_19
+  - first:
+      213: -1244581952136300199
+    second: PoopEffect_20
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 1024
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: PoopEffect_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 163
+        width: 90
+        height: 93
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2309f1218ab2e3720800000000000000
+      internalID: 2827745616893808690
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PoopEffect_1
+      rect:
+        serializedVersion: 2
+        x: 163
+        y: 222
+        width: 9
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 714256242e23ecd30800000000000000
+      internalID: 4453553028873921559
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PoopEffect_2
+      rect:
+        serializedVersion: 2
+        x: 187
+        y: 172
+        width: 43
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7dd4c8f2c502ed5a0800000000000000
+      internalID: -6494718032314872361
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PoopEffect_3
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 208
+        width: 11
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fd8cef59e51a0c7f0800000000000000
+      internalID: -594297723197404961
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PoopEffect_4
+      rect:
+        serializedVersion: 2
+        x: 123
+        y: 200
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 612e6bebf50a19800800000000000000
+      internalID: 617450957008462358
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PoopEffect_5
+      rect:
+        serializedVersion: 2
+        x: 159
+        y: 204
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f888f6d18f2d9c4f0800000000000000
+      internalID: -807882695048722289
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PoopEffect_6
+      rect:
+        serializedVersion: 2
+        x: 55
+        y: 19
+        width: 174
+        height: 182
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d3d5894d1cac3e50800000000000000
+      internalID: 6790491579955401683
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PoopEffect_7
+      rect:
+        serializedVersion: 2
+        x: 234
+        y: 185
+        width: 13
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 77afe2e7cfaab4970800000000000000
+      internalID: 8740267503268067959
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PoopEffect_8
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 160
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5299c5a8f7fe6d870800000000000000
+      internalID: 8707410260628642085
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PoopEffect_9
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 111
+        width: 38
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fb3e70814fdb02e70800000000000000
+      internalID: 9088472904106501055
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PoopEffect_10
+      rect:
+        serializedVersion: 2
+        x: 209
+        y: 121
+        width: 47
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 09b30ad0e070466a0800000000000000
+      internalID: -6457028208802907248
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PoopEffect_11
+      rect:
+        serializedVersion: 2
+        x: 241
+        y: 103
+        width: 11
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 338f53be3831110d0800000000000000
+      internalID: -3453957981908633549
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PoopEffect_12
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 89
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b32f85a4c16428c10800000000000000
+      internalID: 2054281467354739259
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PoopEffect_13
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 72
+        width: 11
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1a642a75b467a7880800000000000000
+      internalID: -8612441271427774815
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PoopEffect_14
+      rect:
+        serializedVersion: 2
+        x: 235
+        y: 74
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 69b8d3f2e7e3400f0800000000000000
+      internalID: -1151726893020640362
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PoopEffect_15
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 39
+        width: 12
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cc572a6fd42099f90800000000000000
+      internalID: -6946518416368699956
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PoopEffect_16
+      rect:
+        serializedVersion: 2
+        x: 242
+        y: 46
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 78c69d96cb20cbc30800000000000000
+      internalID: 4376375946150243463
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PoopEffect_17
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 0
+        width: 41
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3fc09b08c9fd39300800000000000000
+      internalID: 257795466957753587
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PoopEffect_18
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 2
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee411aa1f594b4f00800000000000000
+      internalID: 1102055206639703278
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PoopEffect_19
+      rect:
+        serializedVersion: 2
+        x: 171
+        y: 1
+        width: 11
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88f0b517bbd52d330800000000000000
+      internalID: 3734150100685623176
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PoopEffect_20
+      rect:
+        serializedVersion: 2
+        x: 198
+        y: 1
+        width: 45
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 959bd010f4b5abee0800000000000000
+      internalID: -1244581952136300199
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      PoopEffect_0: 2827745616893808690
+      PoopEffect_1: 4453553028873921559
+      PoopEffect_10: -6457028208802907248
+      PoopEffect_11: -3453957981908633549
+      PoopEffect_12: 2054281467354739259
+      PoopEffect_13: -8612441271427774815
+      PoopEffect_14: -1151726893020640362
+      PoopEffect_15: -6946518416368699956
+      PoopEffect_16: 4376375946150243463
+      PoopEffect_17: 257795466957753587
+      PoopEffect_18: 1102055206639703278
+      PoopEffect_19: 3734150100685623176
+      PoopEffect_2: -6494718032314872361
+      PoopEffect_20: -1244581952136300199
+      PoopEffect_3: -594297723197404961
+      PoopEffect_4: 617450957008462358
+      PoopEffect_5: -807882695048722289
+      PoopEffect_6: 6790491579955401683
+      PoopEffect_7: 8740267503268067959
+      PoopEffect_8: 8707410260628642085
+      PoopEffect_9: 9088472904106501055
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

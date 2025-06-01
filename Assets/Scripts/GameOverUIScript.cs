@@ -1,15 +1,43 @@
-using UnityEngine;
+癤퓎sing UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameOverUIScript : MonoBehaviour
 {
-    public GameObject gameOverText;    // “Game Over” 텍스트
-    public GameObject restartButton;   // “다시 시작” 버튼
-    public GameObject gameOverPanel;   // 검은색 배경 패널
+    public GameObject gameOverText;
+    public GameObject restartButton;
+    public GameObject exitButton;
+    public GameObject gameOverPanel;
+
+    void Start()
+    {
+        if (exitButton != null)
+        {
+            Button btn = exitButton.GetComponent<Button>();
+            if (btn != null)
+            {
+                btn.onClick.AddListener(OnExitClick);
+            }
+        }
+    }
 
     public void ShowGameOver()
     {
-        gameOverPanel.SetActive(true);   // 배경 먼저 활성화
-        gameOverText.SetActive(true);    // 텍스트 활성화
-        restartButton.SetActive(true);   // 버튼 활성화
+        if (gameOverPanel != null)
+            gameOverPanel.SetActive(true);
+
+        if (gameOverText != null)
+            gameOverText.SetActive(true);
+
+        if (restartButton != null)
+            restartButton.SetActive(true);
+
+        if (exitButton != null)
+            exitButton.SetActive(true);
+    }
+
+    public void OnExitClick()
+    {
+        SceneManager.LoadScene("StageSelection");
     }
 }
