@@ -340,6 +340,7 @@ GameObject:
   - component: {fileID: 271207829}
   - component: {fileID: 271207828}
   - component: {fileID: 271207827}
+  - component: {fileID: 271207830}
   m_Layer: 5
   m_Name: BtnSettings
   m_TagString: Untagged
@@ -461,6 +462,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 271207825}
   m_CullTransparentMesh: 1
+--- !u!114 &271207830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 271207825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ac126f6650b4714e8f6c378ffcf7be4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clickSound: {fileID: 8300000, guid: bd24cb866bf802e4fa777339e0f6dac1, type: 3}
 --- !u!1 &328230130
 GameObject:
   m_ObjectHideFlags: 0
@@ -1244,6 +1258,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816ae924d74f7f64fb2e91c4bfa84877, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonClickClip: {fileID: 8300000, guid: bd24cb866bf802e4fa777339e0f6dac1, type: 3}
   soundEnabled: 1
 --- !u!4 &903766823
 Transform:
@@ -1255,6 +1270,51 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.06328, y: -0.95294, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &908188228
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 908188230}
+  - component: {fileID: 908188229}
+  m_Layer: 0
+  m_Name: GameStartButton
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &908188229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 908188228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c49e8940d6496a48869cee351645d3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nextSceneName: MapSelection
+--- !u!4 &908188230
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 908188228}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.14178, y: 0.01788, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1346,6 +1406,18 @@ MonoBehaviour:
       - m_Target: {fileID: 215696176}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: ShowMapSelection
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 908188229}
+        m_TargetAssemblyTypeName: GameStartButton, Assembly-CSharp
+        m_MethodName: OnGameStart
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2863,3 +2935,4 @@ SceneRoots:
   - {fileID: 215696177}
   - {fileID: 903766823}
   - {fileID: 1837451128}
+  - {fileID: 908188230}
