@@ -1258,8 +1258,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816ae924d74f7f64fb2e91c4bfa84877, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonClickClip: {fileID: 8300000, guid: bd24cb866bf802e4fa777339e0f6dac1, type: 3}
   soundEnabled: 1
+  buttonClickClip: {fileID: 8300000, guid: bd24cb866bf802e4fa777339e0f6dac1, type: 3}
+  eatClip: {fileID: 8300000, guid: f4bfed2dd73c9394ca45b94d1d9442fa, type: 3}
 --- !u!4 &903766823
 Transform:
   m_ObjectHideFlags: 0
@@ -1304,7 +1305,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c49e8940d6496a48869cee351645d3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextSceneName: MapSelection
 --- !u!4 &908188230
 Transform:
   m_ObjectHideFlags: 0

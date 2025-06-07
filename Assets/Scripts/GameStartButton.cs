@@ -1,11 +1,10 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class GameStartButton : MonoBehaviour
 {
-    public string nextSceneName = "MapSelection";
-
     public void OnGameStart()
     {
-        SoundManager.Instance.PlayClickAndLoadScene(nextSceneName, 0.2f);
+        // 🎯 오직 하나의 인자만 줘야 오류 없음!
+        SoundManager.Instance.PlayClickAndLoadScene("MapSelection");
     }
 }

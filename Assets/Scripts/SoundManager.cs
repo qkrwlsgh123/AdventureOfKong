@@ -1,14 +1,18 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections;
 
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance;
-    public AudioClip buttonClickClip;
-    private AudioSource audioSource;
 
+    [Header("사운드 설정")]
     public bool soundEnabled = true;
+
+    [Header("효과음 클립")]
+    public AudioClip buttonClickClip;
+    public AudioClip eatClip;
+
+    private AudioSource audioSource;
 
     void Awake()
     {
@@ -16,12 +20,39 @@ public class SoundManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource = GetComponent<AudioSource>();
         }
         else
         {
             Destroy(gameObject);
         }
+    }
+
+    public void PlayClickSound()
+    {
+        if (soundEnabled && buttonClickClip != null)
+            audioSource.PlayOneShot(buttonClickClip);
+    }
+
+    public void PlayEatSound()
+    {
+        if (soundEnabled && eatClip != null)
+            audioSource.PlayOneShot(eatClip);
+    }
+
+    // ✅ 하나의 인자만 받는 안전한 버전
+    public void PlayClickAndLoadScene(string sceneName)
+    {
+        if (soundEnabled && buttonClickClip != null)
+            audioSource.PlayOneShot(buttonClickClip);
+
+        StartCoroutine(DelayedSceneLoad(sceneName));
+    }
+
+    private System.Collections.IEnumerator DelayedSceneLoad(string sceneName)
+    {
+        yield return new WaitForSeconds(0.15f); // 소리 재생 시간만큼 대기
+        SceneManager.LoadScene(sceneName);
     }
 
     public void SetSoundEnabled(bool enabled)
@@ -32,27 +63,5 @@ public class SoundManager : MonoBehaviour
     public bool IsSoundEnabled()
     {
         return soundEnabled;
-    }
-
-    public void PlayClickSound()
-    {
-        if (soundEnabled && buttonClickClip != null && audioSource != null)
-        {
-            audioSource.PlayOneShot(buttonClickClip);
-        }
-    }
-
-    // ✅ 소리 재생 후 delay 주고 씬 전환
-    public void PlayClickAndLoadScene(string sceneName, float delay = 0.2f)
-    {
-        if (Instance != null)
-            StartCoroutine(LoadSceneAfterClick(sceneName, delay));
-    }
-
-    private IEnumerator LoadSceneAfterClick(string sceneName, float delay)
-    {
-        PlayClickSound();
-        yield return new WaitForSecondsRealtime(delay); // ✅ 중요: 타임스케일 무시
-        SceneManager.LoadScene(sceneName);
     }
 }
