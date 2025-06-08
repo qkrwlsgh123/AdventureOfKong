@@ -33,25 +33,25 @@ public class BallController : MonoBehaviour
     public AudioClip jumpSound;
     public AudioClip growSound;
     public AudioClip bugBiteSound;
-    public AudioClip poopEatSound;
 
-    Rigidbody2D rb;
-    AudioSource audioSource;
+    [Header("새 프리팹 연결")]
+    public EogkkaBirdController birdPrefab;
 
-    bool isGrounded = false;
-    bool isOnWaterBottom = false;
-    bool isDead = false;
+    private Rigidbody2D rb;
+    private AudioSource audioSource;
 
-    int waterContactCount = 0;
-    bool waterEverContact = false;
-    bool isInWater { get { return waterContactCount > 0; } }
+    private bool isGrounded = false;
+    private bool isOnWaterBottom = false;
+    private bool isDead = false;
+    private bool isPausedByEogkka = false;
 
-    float waterTimer = 0f;
+    private int waterContactCount = 0;
+    private bool waterEverContact = false;
+    private bool isInWater { get { return waterContactCount > 0; } }
 
-    [SerializeField, HideInInspector] // ✅ 숨김 처리 및 초기화
+    private float waterTimer = 0f;
     private int growthStage = 0;
-
-    float initialSpeed, initialJump;
+    private float initialSpeed, initialJump;
 
     private bool sunHitProcessed = false;
     private HashSet<GameObject> bugTouched = new HashSet<GameObject>();
@@ -67,7 +67,6 @@ public class BallController : MonoBehaviour
         initialSpeed = speed;
         initialJump = jumpPower;
 
-        growthStage = 0; // ✅ 강제 초기화
         maxHealth = baseHealth + growthStage;
         currentHealth = maxHealth;
 
@@ -76,7 +75,7 @@ public class BallController : MonoBehaviour
 
     void Update()
     {
-        if (isDead) return;
+        if (isDead || isPausedByEogkka || Time.timeScale == 0f) return;
 
         float h = Input.GetAxis("Horizontal");
         rb.linearVelocity = new Vector2(h * speed, rb.linearVelocity.y);
@@ -86,15 +85,20 @@ public class BallController : MonoBehaviour
             waterTimer += Time.deltaTime;
             if (waterTimer >= growthInterval)
             {
-                waterTimer -= growthInterval;
+                waterTimer = 0f;
                 GrowOneStage();
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            TriggerEogkkaDirectly();
         }
     }
 
     void FixedUpdate()
     {
-        if (isDead) return;
+        if (isDead || isPausedByEogkka || Time.timeScale == 0f) return;
 
         if (isInWater)
         {
@@ -110,16 +114,55 @@ public class BallController : MonoBehaviour
 
             if (isGrounded)
             {
-                if (jumpSound != null && audioSource != null &&
-                    SoundManager.Instance != null && SoundManager.Instance.IsSoundEnabled())
-                {
+                if (jumpSound != null && audioSource != null)
                     audioSource.PlayOneShot(jumpSound);
-                }
 
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpPower);
                 isGrounded = false;
             }
         }
+    }
+
+    public void PauseGameExceptBird()
+    {
+        isPausedByEogkka = true;
+        isDead = true;
+        rb.linearVelocity = Vector2.zero;
+        rb.constraints = RigidbodyConstraints2D.FreezeAll;
+
+        // ❌ 콩을 숨기지 않음
+        // var sr = GetComponent<SpriteRenderer>();
+        // if (sr != null) sr.enabled = false;
+    }
+
+    public void TriggerEogkkaDirectly()
+    {
+        Time.timeScale = 0f;
+
+        Vector3 spawnPos = new Vector3(0f, 6f, 0f);
+        Instantiate(birdPrefab, spawnPos, Quaternion.identity);
+    }
+
+    public void TakeDamage()
+    {
+        if (isDead) return;
+
+        currentHealth--;
+
+        if (bugBiteSound != null && audioSource != null)
+            audioSource.PlayOneShot(bugBiteSound);
+
+        if (currentHealth <= 0)
+        {
+            isDead = true;
+            gameOverUI.ShowGameOver();
+        }
+    }
+
+    public void PlayPoopEatSound()
+    {
+        if (SoundManager.Instance != null)
+            SoundManager.Instance.PlayEatSound();
     }
 
     void GrowOneStage()
@@ -134,43 +177,11 @@ public class BallController : MonoBehaviour
         speed = Mathf.Lerp(initialSpeed, initialSpeed * minSpeedFactor, t);
         jumpPower = Mathf.Lerp(initialJump, initialJump * minJumpFactor, t);
 
-        if (growSound != null && audioSource != null &&
-            SoundManager.Instance != null && SoundManager.Instance.IsSoundEnabled())
-        {
+        if (growSound != null && audioSource != null)
             audioSource.PlayOneShot(growSound);
-        }
 
         if (growthStage >= 7)
             BeginDeathByGrowth();
-    }
-
-    public void TakeDamage()
-    {
-        if (isDead) return;
-
-        currentHealth--;
-
-        if (bugBiteSound != null && audioSource != null &&
-            SoundManager.Instance != null && SoundManager.Instance.IsSoundEnabled())
-        {
-            audioSource.PlayOneShot(bugBiteSound);
-        }
-
-        if (currentHealth <= 0)
-        {
-            isDead = true;
-            if (gameOverUI != null)
-                gameOverUI.ShowGameOver();
-        }
-    }
-
-    public void PlayPoopEatSound()
-    {
-        if (poopEatSound != null && audioSource != null &&
-            SoundManager.Instance != null && SoundManager.Instance.IsSoundEnabled())
-        {
-            audioSource.PlayOneShot(poopEatSound);
-        }
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -190,22 +201,15 @@ public class BallController : MonoBehaviour
                     Destroy(splash, 0.5f);
                 }
 
-                if (waterSplashSound != null && audioSource != null &&
-                    SoundManager.Instance != null && SoundManager.Instance.IsSoundEnabled())
-                {
+                if (waterSplashSound != null && audioSource != null)
                     audioSource.PlayOneShot(waterSplashSound);
-                }
             }
         }
 
-        if (other.CompareTag("DeathZone"))
+        if (other.CompareTag("DeathZone") && !isDead)
         {
-            if (!isDead)
-            {
-                isDead = true;
-                if (gameOverUI != null)
-                    gameOverUI.ShowGameOver();
-            }
+            isDead = true;
+            gameOverUI?.ShowGameOver();
         }
     }
 
@@ -332,7 +336,6 @@ public class BallController : MonoBehaviour
     IEnumerator DelayedGameOver()
     {
         yield return new WaitForSeconds(1f);
-        if (gameOverUI != null)
-            gameOverUI.ShowGameOver();
+        gameOverUI?.ShowGameOver();
     }
 }
