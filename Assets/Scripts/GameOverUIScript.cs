@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class GameOverUIScript : MonoBehaviour
 {
+    public static bool IsGameOver = false; // ✅ 게임 오버 상태 변수
+
     public GameObject gameOverText;
     public GameObject restartButton;
     public GameObject exitButton;
@@ -11,6 +13,8 @@ public class GameOverUIScript : MonoBehaviour
 
     void Start()
     {
+        IsGameOver = false; // ✅ 초기화
+
         if (exitButton != null)
         {
             Button btn = exitButton.GetComponent<Button>();
@@ -23,6 +27,8 @@ public class GameOverUIScript : MonoBehaviour
 
     public void ShowGameOver()
     {
+        IsGameOver = true; // ✅ GameOver 상태 설정
+
         if (gameOverPanel != null)
             gameOverPanel.SetActive(true);
 

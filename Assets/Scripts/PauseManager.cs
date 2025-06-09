@@ -1,13 +1,13 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PauseManager : MonoBehaviour
 {
-    public GameObject pauseMenuUI;     // PauseMenuUI ÀüÃ¼
-    public GameObject darkPanel;       // ¾îµÎ¿î ¹è°æ ÆĞ³Î
-    public Button resumeButton;        // ´Ù½Ã ½ÃÀÛ ¹öÆ°
-    public Button exitButton;          // ³ª°¡±â ¹öÆ°
+    public GameObject pauseMenuUI;     // PauseMenuUI ì „ì²´
+    public GameObject darkPanel;       // ì–´ë‘ìš´ ë°°ê²½ íŒ¨ë„
+    public Button resumeButton;        // ë‹¤ì‹œ ì‹œì‘ ë²„íŠ¼
+    public Button exitButton;          // ë‚˜ê°€ê¸° ë²„íŠ¼
 
     void Start()
     {
@@ -20,7 +20,11 @@ public class PauseManager : MonoBehaviour
 
     void Update()
     {
-        // ESC Å° ¶Ç´Â Android Back Å° ÀÔ·Â °¨Áö
+        // âœ… GameOver ìƒíƒœë©´ ESC ë¬´ì‹œ
+        if (GameOverUIScript.IsGameOver)
+            return;
+
+        // ESC í‚¤ ê°ì§€
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (pauseMenuUI != null && !pauseMenuUI.activeSelf)
