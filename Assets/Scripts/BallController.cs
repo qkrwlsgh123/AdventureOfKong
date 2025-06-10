@@ -127,18 +127,20 @@ public class BallController : MonoBehaviour
     {
         isPausedByEogkka = true;
         isDead = true;
+
         rb.linearVelocity = Vector2.zero;
+        rb.angularVelocity = 0;
         rb.constraints = RigidbodyConstraints2D.FreezeAll;
 
-        // ❌ 콩을 숨기지 않음
-        // var sr = GetComponent<SpriteRenderer>();
-        // if (sr != null) sr.enabled = false;
+        transform.position = transform.position; // 위치 고정
+
+        var sr = GetComponent<SpriteRenderer>();
+        if (sr != null) sr.enabled = false;
     }
 
     public void TriggerEogkkaDirectly()
     {
         Time.timeScale = 0f;
-
         Vector3 spawnPos = new Vector3(0f, 6f, 0f);
         Instantiate(birdPrefab, spawnPos, Quaternion.identity);
     }

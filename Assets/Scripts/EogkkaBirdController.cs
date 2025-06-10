@@ -22,6 +22,14 @@ public class EogkkaBirdController : MonoBehaviour
         Vector3 scale = transform.localScale;
         scale.x = moveDir.x < 0 ? -1f : 1f;
         transform.localScale = scale;
+
+        // 게임 전체 멈춤
+        Time.timeScale = 0f;
+
+        // 콩 멈춤
+        BallStopController stopper = targetBall.GetComponent<BallStopController>();
+        if (stopper != null)
+            stopper.StopImmediately();
     }
 
     void Update()
@@ -56,16 +64,9 @@ public class EogkkaBirdController : MonoBehaviour
             SoundManager.Instance.PlayEatSound();
 
         SpriteRenderer sr = targetBall.GetComponent<SpriteRenderer>();
-        if (sr != null)
-            sr.enabled = false;
+        if (sr != null) sr.enabled = false;
 
         Rigidbody2D rb = targetBall.GetComponent<Rigidbody2D>();
-        if (rb != null)
-            rb.simulated = false;
-    }
-
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        // 사용 안 함
+        if (rb != null) rb.simulated = false;
     }
 }
