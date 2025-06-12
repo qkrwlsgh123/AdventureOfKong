@@ -11,6 +11,8 @@ public class TreeBlockGrower : MonoBehaviour
     private Transform currentLeaf;
     private int height = 1;
 
+    private const float BlockSize = 0.75f; // 블록 간격 단위
+
     void Start()
     {
         if (IsNextToWater())
@@ -19,7 +21,7 @@ public class TreeBlockGrower : MonoBehaviour
             timer = growInterval;
 
             // 초기 잎 생성 (위에 비어있을 때)
-            Vector2 top = transform.position + Vector3.up;
+            Vector2 top = (Vector2)transform.position + Vector2.up * BlockSize;
             if (leafPrefab != null && Physics2D.OverlapCircle(top, 0.1f) == null)
             {
                 GameObject leaf = Instantiate(leafPrefab, top, Quaternion.identity);
@@ -42,13 +44,14 @@ public class TreeBlockGrower : MonoBehaviour
 
     void GrowTreeSegment()
     {
-        Vector2 newSegmentPos = transform.position + Vector3.up * height;
+        Vector2 newSegmentPos = (Vector2)transform.position + Vector2.up * height * BlockSize;
         Instantiate(treeSegmentPrefab, newSegmentPos, Quaternion.identity);
 
         height++;
+
         if (currentLeaf != null)
         {
-            currentLeaf.position = transform.position + Vector3.up * height;
+            currentLeaf.position = (Vector2)transform.position + Vector2.up * height * BlockSize;
         }
     }
 

@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 5206197881941680112}
   - component: {fileID: 4818918393263256039}
   - component: {fileID: 8182764253792681122}
-  - component: {fileID: 4207624903275942557}
   - component: {fileID: 3619747250546963531}
+  - component: {fileID: 6760964235292745790}
   m_Layer: 0
   m_Name: "\uB098\uBB34\uBE14\uB85D"
   m_TagString: BounceBlock
@@ -135,7 +135,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.75, y: 0.75}
   m_EdgeRadius: 0
 --- !u!114 &8182764253792681122
 MonoBehaviour:
@@ -150,22 +150,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bounceForce: 6
---- !u!114 &4207624903275942557
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2121359803013436965}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd484c01bfd82f94298ebe4a0ea8678c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  segmentPrefab: {fileID: 2121359803013436965, guid: 0f3df1e517982b447883b8eed348521c, type: 3}
-  segmentHeight: 1
-  foliagePrefab: {fileID: 947991055013817213, guid: f338dfe6089884749bb8d9920eda63fe, type: 3}
-  growInterval: 5
 --- !u!50 &3619747250546963531
 Rigidbody2D:
   serializedVersion: 5
@@ -193,3 +177,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
+--- !u!114 &6760964235292745790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2121359803013436965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a69951d39b24840468449363be913938, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  treeSegmentPrefab: {fileID: 2121359803013436965, guid: 0f3df1e517982b447883b8eed348521c, type: 3}
+  leafPrefab: {fileID: 947991055013817213, guid: f338dfe6089884749bb8d9920eda63fe, type: 3}
+  growInterval: 5
