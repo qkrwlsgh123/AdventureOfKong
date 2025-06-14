@@ -31,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 5419921445077653223}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7, y: 2, z: 0}
+  m_LocalPosition: {x: -6.75, y: 0, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -168,8 +168,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 585636f73bcaf8f46835c40eaa440c7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 3
-  jumpPower: 5.4
+  speed: 2.5
+  jumpPower: 4.5
   growthInterval: 2
   growthSprites:
   - {fileID: 1379966280, guid: 0e37309605e3a3c4d88e37d8eafb9890, type: 3}
@@ -189,7 +189,7 @@ MonoBehaviour:
   jumpSound: {fileID: 8300000, guid: 7798d9e270f9b174cbd7933b1ec92e33, type: 3}
   growSound: {fileID: 8300000, guid: 7fc123acafab342409bd292a67e3c8fc, type: 3}
   bugBiteSound: {fileID: 8300000, guid: 6267e3439f396c648892ae5e11224bf7, type: 3}
-  poopEatSound: {fileID: 8300000, guid: 01f680a8d5168834f87d541b8c4ab351, type: 3}
+  birdPrefab: {fileID: 0}
 --- !u!114 &6303798002501222474
 MonoBehaviour:
   m_ObjectHideFlags: 0
