@@ -471,6 +471,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 2965807279675668682, guid: 4d0042ce38cf414489d713844cc22ec3, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7570301738640661519, guid: 4d0042ce38cf414489d713844cc22ec3, type: 3}
+      propertyPath: gameOverUI
+      value: 
+      objectReference: {fileID: 585672029}
     - target: {fileID: 8164837136645554514, guid: 4d0042ce38cf414489d713844cc22ec3, type: 3}
       propertyPath: player
       value: 
@@ -485,7 +493,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1158682906264647370, guid: 4d0042ce38cf414489d713844cc22ec3, type: 3}
   m_PrefabInstance: {fileID: 431919563}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 585672029}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e03fd4379d518de4ea60a9c01c1c8273, type: 3}
@@ -624,6 +632,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 7325540664292780532, guid: 59cc8cb317968ce418f8847ab5df72ed, type: 3}
   m_PrefabInstance: {fileID: 1820435157}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &585672029 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8238560880526947522, guid: 4d0042ce38cf414489d713844cc22ec3, type: 3}
+  m_PrefabInstance: {fileID: 431919563}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &603544372
 PrefabInstance:

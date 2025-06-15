@@ -13,8 +13,14 @@ public class GameOverUIScript : MonoBehaviour
 
     void Start()
     {
-        IsGameOver = false; // ✅ 초기화
+        // ✅ 시작 시 GameOver 상태 초기화
+        IsGameOver = false;
 
+        // ✅ GameOver UI 전체 꺼주기
+        if (gameOverPanel != null)
+            gameOverPanel.SetActive(false);
+
+        // 나가기 버튼 클릭 이벤트 연결
         if (exitButton != null)
         {
             Button btn = exitButton.GetComponent<Button>();
@@ -25,9 +31,10 @@ public class GameOverUIScript : MonoBehaviour
         }
     }
 
+    // ✅ 게임오버 UI 활성화
     public void ShowGameOver()
     {
-        IsGameOver = true; // ✅ GameOver 상태 설정
+        IsGameOver = true;
 
         if (gameOverPanel != null)
             gameOverPanel.SetActive(true);

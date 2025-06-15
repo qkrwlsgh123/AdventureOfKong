@@ -4,11 +4,10 @@ using UnityEngine.UI;
 
 public class PauseManager : MonoBehaviour
 {
-    public GameObject pauseMenuUI;     // PauseMenuUI 전체
-    public GameObject darkPanel;       // 어두운 배경 패널
-    public Button resumeButton;        // 다시 시작 버튼
-    public Button exitButton;          // 나가기 버튼
-    public GameObject clearUI;         // ✅ ClearUI 오브젝트 (Inspector에서 연결해야 함)
+    public GameObject pauseMenuUI;   // Pause UI 전체
+    public GameObject clearUI;       // ClearCanvas 오브젝트 (Inspector에서 연결)
+    public Button resumeButton;
+    public Button exitButton;
 
     void Start()
     {
@@ -21,26 +20,30 @@ public class PauseManager : MonoBehaviour
 
     void Update()
     {
-        // ✅ GameOver 상태면 ESC 무시
-        if (GameOverUIScript.IsGameOver)
-            return;
-
-        // ✅ ESC 키 눌렀을 때만 ClearUI 상태 체크
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            // ✅ ClearUI가 떠 있으면 ESC로는 PauseUI 못 켬
-            if (clearUI != null && clearUI.activeSelf)
+            // ✅ 1. ClearUI 떠 있으면 ESC 무시
+            if (GameManager.IsStageCleared &&
+                clearUI != null &&
+                clearUI.activeInHierarchy)
             {
-                Debug.Log("✅ ClearUI 열려있음 → ESC 무시");
+                Debug.Log("❌ ClearUI 떠 있어서 ESC 무시됨");
                 return;
             }
 
-            // ESC로 PauseUI 토글
+            // ✅ 2. GameOver 상태면 ESC 무시
+            if (GameOverUIScript.IsGameOver)
+            {
+                Debug.Log("❌ GameOver 상태에서 ESC 무시됨");
+                return;
+            }
+
+            // ✅ 3. ESC로 PauseUI 토글
             if (pauseMenuUI != null && !pauseMenuUI.activeSelf)
             {
                 PauseGame();
             }
-            else if (pauseMenuUI != null && pauseMenuUI.activeSelf)
+            else
             {
                 ResumeGame();
             }
@@ -50,13 +53,15 @@ public class PauseManager : MonoBehaviour
     public void PauseGame()
     {
         Time.timeScale = 0f;
-        if (pauseMenuUI != null) pauseMenuUI.SetActive(true);
+        if (pauseMenuUI != null)
+            pauseMenuUI.SetActive(true);
     }
 
     public void ResumeGame()
     {
         Time.timeScale = 1f;
-        if (pauseMenuUI != null) pauseMenuUI.SetActive(false);
+        if (pauseMenuUI != null)
+            pauseMenuUI.SetActive(false);
     }
 
     public void ExitToStageSelection()

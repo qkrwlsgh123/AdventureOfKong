@@ -6,6 +6,7 @@ using System.Collections;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+    public static bool IsStageCleared = false;  // ✅ 클리어 여부 플래그
 
     [Header("클리어 UI")]
     public GameObject clearUI;
@@ -22,6 +23,9 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        // 초기화
+        IsStageCleared = false;
+
         // 씬 안에 있는 모든 똥 개수 세기
         totalPoopCount = GameObject.FindGameObjectsWithTag("Poop").Length;
         collectedCount = 0;
@@ -59,6 +63,8 @@ public class GameManager : MonoBehaviour
 
         if (messageText != null)
             messageText.text = "GOOD!";
+
+        IsStageCleared = true;  // ✅ 클리어 발생 시점에 true 설정
     }
 
     // 다음 스테이지로 이동
@@ -75,7 +81,7 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("StageSelection");
     }
 
-    // ✅ 현재 스테이지 다시 시작
+    // 현재 스테이지 다시 시작
     public void RestartStage()
     {
         Time.timeScale = 1f;
