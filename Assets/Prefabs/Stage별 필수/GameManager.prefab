@@ -792,10 +792,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenuUI: {fileID: 763115142884368095}
-  darkPanel: {fileID: 6632501988041802826}
+  clearUI: {fileID: 5943478731263909172}
   resumeButton: {fileID: 4300982706254159308}
   exitButton: {fileID: 7412362755977821072}
-  clearUI: {fileID: 5943478731263909172}
 --- !u!1 &2450443592310585465
 GameObject:
   m_ObjectHideFlags: 0
@@ -1377,7 +1376,7 @@ Transform:
   m_GameObject: {fileID: 2817317661896490862}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.22934, y: -0.09753, z: 0}
+  m_LocalPosition: {x: -0.91145, y: -1.16302, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1890,7 +1889,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1466901887221805666}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7570301738640661519}
+        m_TargetAssemblyTypeName: PauseManager, Assembly-CSharp
+        m_MethodName: ExitToStageSelection
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5642737316100759591
 GameObject:
   m_ObjectHideFlags: 0
@@ -2607,7 +2618,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2291695854394187027}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7570301738640661519}
+        m_TargetAssemblyTypeName: PauseManager, Assembly-CSharp
+        m_MethodName: ResumeGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7017732714646890290
 GameObject:
   m_ObjectHideFlags: 0
