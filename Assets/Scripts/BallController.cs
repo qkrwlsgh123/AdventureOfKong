@@ -44,6 +44,7 @@ public class BallController : MonoBehaviour
     private bool isOnWaterBottom = false;
     private bool isDead = false;
     private bool isPausedByEogkka = false;
+    private bool onTriangleSlope = false;
 
     private int waterContactCount = 0;
     private bool waterEverContact = false;
@@ -94,6 +95,12 @@ public class BallController : MonoBehaviour
         {
             TriggerEogkkaDirectly();
         }
+
+        // 기어오름 보정
+        if (isInWater && isOnWaterBottom && onTriangleSlope && Mathf.Abs(h) > 0.01f)
+        {
+            rb.linearVelocity += new Vector2(0.75f * Mathf.Sign(h), 0.05f);
+        }
     }
 
     void FixedUpdate()
@@ -131,8 +138,6 @@ public class BallController : MonoBehaviour
         rb.linearVelocity = Vector2.zero;
         rb.angularVelocity = 0;
         rb.constraints = RigidbodyConstraints2D.FreezeAll;
-
-        transform.position = transform.position; // 위치 고정
 
         var sr = GetComponent<SpriteRenderer>();
         if (sr != null) sr.enabled = false;
@@ -265,10 +270,12 @@ public class BallController : MonoBehaviour
 
         if (!isInWater && col.gameObject.CompareTag("TriangleBlock"))
         {
+            onTriangleSlope = false;
             foreach (var ct in col.contacts)
-                if (ct.normal.y > 0.1f && Mathf.Abs(ct.normal.x) > 0.1f)
+                if (ct.normal.y > 0.01f && Mathf.Abs(ct.normal.x) > 0.01f)
                 {
                     isGrounded = true;
+                    onTriangleSlope = true;
                     break;
                 }
             return;

@@ -1,17 +1,17 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class TreeBlockGrower : MonoBehaviour
 {
-    public GameObject treeSegmentPrefab; // ÀÚ¶ó³ª´Â ³ª¹« ¼¼±×¸ÕÆ®
-    public GameObject leafPrefab;        // ÀÙ prefab
-    public float growInterval = 5f;      // ¼ºÀå °£°İ
+    public GameObject treeSegmentPrefab; // ìë¼ë‚˜ëŠ” ë‚˜ë¬´ ì„¸ê·¸ë¨¼íŠ¸
+    public GameObject leafPrefab;        // ì prefab
+    public float growInterval = 5f;      // ì„±ì¥ ê°„ê²©
 
     private float timer = 0f;
     private bool hasStarted = false;
     private Transform currentLeaf;
     private int height = 1;
 
-    private const float BlockSize = 0.75f; // ºí·Ï °£°İ ´ÜÀ§
+    private const float BlockSize = 0.75f; // ë¸”ë¡ ê°„ê²© ë‹¨ìœ„
 
     void Start()
     {
@@ -20,13 +20,7 @@ public class TreeBlockGrower : MonoBehaviour
             hasStarted = true;
             timer = growInterval;
 
-            // ÃÊ±â ÀÙ »ı¼º (À§¿¡ ºñ¾îÀÖÀ» ¶§)
-            Vector2 top = (Vector2)transform.position + Vector2.up * BlockSize;
-            if (leafPrefab != null && Physics2D.OverlapCircle(top, 0.1f) == null)
-            {
-                GameObject leaf = Instantiate(leafPrefab, top, Quaternion.identity);
-                currentLeaf = leaf.transform;
-            }
+            CreateLeafAbove(height);  // ì´ˆê¸° ì ìƒì„±
         }
     }
 
@@ -45,13 +39,36 @@ public class TreeBlockGrower : MonoBehaviour
     void GrowTreeSegment()
     {
         Vector2 newSegmentPos = (Vector2)transform.position + Vector2.up * height * BlockSize;
-        Instantiate(treeSegmentPrefab, newSegmentPos, Quaternion.identity);
 
+        // ìœ„ì— BounceBlockì´ ìˆë‹¤ë©´ ì¤‘ë‹¨
+        Collider2D hit = Physics2D.OverlapCircle(newSegmentPos, 0.1f);
+        if (hit != null && hit.CompareTag("BounceBlock"))
+        {
+            hasStarted = false;
+            return;
+        }
+
+        // ë‚˜ë¬´ ì„¸ê·¸ë¨¼íŠ¸ ìƒì„±
+        Instantiate(treeSegmentPrefab, newSegmentPos, Quaternion.identity);
         height++;
 
+        // ì ì²˜ë¦¬
+        CreateLeafAbove(height);
+    }
+
+    void CreateLeafAbove(int h)
+    {
+        Vector2 leafPos = (Vector2)transform.position + Vector2.up * h * BlockSize;
+
+        // ì´ë¯¸ ì¡´ì¬í•˜ëŠ” ìì´ ìˆë‹¤ë©´ ìœ„ì¹˜ë§Œ ì˜®ê¸°ê¸°
         if (currentLeaf != null)
         {
-            currentLeaf.position = (Vector2)transform.position + Vector2.up * height * BlockSize;
+            currentLeaf.position = leafPos;
+        }
+        else if (leafPrefab != null && Physics2D.OverlapCircle(leafPos, 0.1f) == null)
+        {
+            GameObject leaf = Instantiate(leafPrefab, leafPos, Quaternion.identity);
+            currentLeaf = leaf.transform;
         }
     }
 
@@ -61,7 +78,7 @@ public class TreeBlockGrower : MonoBehaviour
         foreach (Vector2 dir in directions)
         {
             Collider2D hit = Physics2D.OverlapCircle((Vector2)transform.position + dir, 0.1f);
-            if (hit != null && hit.CompareTag("¹°ºí·Ï"))
+            if (hit != null && hit.CompareTag("ë¬¼ë¸”ë¡"))
                 return true;
         }
         return false;

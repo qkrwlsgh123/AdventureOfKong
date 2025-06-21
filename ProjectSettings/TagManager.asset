@@ -11,6 +11,7 @@ TagManager:
   - TriangleBlock
   - Poop
   - DeathZone
+  - WaterBottomTriangle
   layers:
   - Default
   - TransparentFX

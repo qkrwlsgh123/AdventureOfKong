@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8983539990824680459
+--- !u!1 &1005818214546000869
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,38 +8,38 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 9147217154836928396}
-  - component: {fileID: 7994724854729351316}
-  - component: {fileID: 3938815966315731822}
+  - component: {fileID: 1130370357330780258}
+  - component: {fileID: 2282313141798705018}
+  - component: {fileID: 5185873052555930752}
   m_Layer: 0
-  m_Name: "\uC0BC\uAC01\uD615\uBE14\uB85D(\uD759)Right 1"
-  m_TagString: TriangleBlock
+  m_Name: "\uBB3C\uBC14\uB2E5\uC0BC\uAC01\uD615\uBE14\uB85D(\uD759)Right"
+  m_TagString: WaterBottomTriangle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &9147217154836928396
+--- !u!4 &1130370357330780258
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8983539990824680459}
+  m_GameObject: {fileID: 1005818214546000869}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.75, y: 0, z: 0}
+  m_LocalPosition: {x: -1.20554, y: -0.81558, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &7994724854729351316
+--- !u!212 &2282313141798705018
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8983539990824680459}
+  m_GameObject: {fileID: 1005818214546000869}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -88,13 +88,13 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!60 &3938815966315731822
+--- !u!60 &5185873052555930752
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8983539990824680459}
+  m_GameObject: {fileID: 1005818214546000869}
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
@@ -134,8 +134,8 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.07813597, y: 0.08286564}
-      - {x: -0.37510648, y: 0.3756178}
-      - {x: -0.37514487, y: -0.37411982}
-      - {x: 0.37505782, y: -0.37432045}
+    - - {x: 0.37515682, y: 0.3753899}
+      - {x: -0.37497973, y: -0.37577578}
+      - {x: -0.37497973, y: -0.37501875}
+      - {x: 0.37507802, y: -0.37563378}
   m_UseDelaunayMesh: 0

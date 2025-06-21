@@ -169,7 +169,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2.5
-  jumpPower: 4.5
+  jumpPower: 4.4
   growthInterval: 2
   growthSprites:
   - {fileID: 1379966280, guid: 0e37309605e3a3c4d88e37d8eafb9890, type: 3}
