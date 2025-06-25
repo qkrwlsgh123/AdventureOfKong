@@ -12,6 +12,7 @@ TagManager:
   - Poop
   - DeathZone
   - WaterBottomTriangle
+  - Leaf
   layers:
   - Default
   - TransparentFX

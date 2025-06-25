@@ -20,7 +20,13 @@ public class TreeBlockGrower : MonoBehaviour
             hasStarted = true;
             timer = growInterval;
 
-            CreateLeafAbove(height);  // 초기 잎 생성
+            // 초기 잎 생성 (위에 비어있을 때)
+            Vector2 top = (Vector2)transform.position + Vector2.up * BlockSize;
+            if (leafPrefab != null && Physics2D.OverlapCircle(top, 0.1f) == null)
+            {
+                GameObject leaf = Instantiate(leafPrefab, top, Quaternion.identity);
+                currentLeaf = leaf.transform;
+            }
         }
     }
 
@@ -40,35 +46,23 @@ public class TreeBlockGrower : MonoBehaviour
     {
         Vector2 newSegmentPos = (Vector2)transform.position + Vector2.up * height * BlockSize;
 
-        // 위에 BounceBlock이 있다면 중단
-        Collider2D hit = Physics2D.OverlapCircle(newSegmentPos, 0.1f);
-        if (hit != null && hit.CompareTag("BounceBlock"))
+        // 성장 위치에 이미 다른 블록이 있는지 검사 (단, 잎 또는 Player는 예외)
+        Collider2D[] hits = Physics2D.OverlapCircleAll(newSegmentPos, 0.1f);
+        foreach (var hit in hits)
         {
-            hasStarted = false;
-            return;
+            if (hit != null && hit.tag != "Leaf" && hit.tag != "Player")
+            {
+                hasStarted = false;
+                return;
+            }
         }
 
-        // 나무 세그먼트 생성
         Instantiate(treeSegmentPrefab, newSegmentPos, Quaternion.identity);
         height++;
 
-        // 잎 처리
-        CreateLeafAbove(height);
-    }
-
-    void CreateLeafAbove(int h)
-    {
-        Vector2 leafPos = (Vector2)transform.position + Vector2.up * h * BlockSize;
-
-        // 이미 존재하는 잎이 있다면 위치만 옮기기
-        if (currentLeaf != null)
+        if (currentLeaf != null && hasStarted)
         {
-            currentLeaf.position = leafPos;
-        }
-        else if (leafPrefab != null && Physics2D.OverlapCircle(leafPos, 0.1f) == null)
-        {
-            GameObject leaf = Instantiate(leafPrefab, leafPos, Quaternion.identity);
-            currentLeaf = leaf.transform;
+            currentLeaf.position = (Vector2)transform.position + Vector2.up * height * BlockSize;
         }
     }
 

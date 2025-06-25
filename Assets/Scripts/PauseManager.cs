@@ -6,8 +6,12 @@ public class PauseManager : MonoBehaviour
 {
     public GameObject pauseMenuUI;   // Pause UI 전체
     public GameObject clearUI;       // ClearCanvas 오브젝트 (Inspector에서 연결)
+
     public Button resumeButton;
     public Button exitButton;
+
+    // 🔹 처음부터 버튼 추가
+    public Button restartFromBeginningButton;
 
     void Start()
     {
@@ -16,6 +20,9 @@ public class PauseManager : MonoBehaviour
 
         resumeButton.onClick.AddListener(ResumeGame);
         exitButton.onClick.AddListener(ExitToStageSelection);
+
+        // 🔹 처음부터 버튼 클릭 시 현재 스테이지 다시 로드
+        restartFromBeginningButton.onClick.AddListener(RestartStageFromBeginning);
     }
 
     void Update()
@@ -68,5 +75,12 @@ public class PauseManager : MonoBehaviour
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene("StageSelection");
+    }
+
+    // 🔹 현재 스테이지 처음부터 다시 시작
+    public void RestartStageFromBeginning()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

@@ -45,6 +45,7 @@ public class BallController : MonoBehaviour
     private bool isDead = false;
     private bool isPausedByEogkka = false;
     private bool onTriangleSlope = false;
+    private bool jumpManuallyThisFrame = false;
 
     private int waterContactCount = 0;
     private bool waterEverContact = false;
@@ -96,7 +97,6 @@ public class BallController : MonoBehaviour
             TriggerEogkkaDirectly();
         }
 
-        // 기어오름 보정
         if (isInWater && isOnWaterBottom && onTriangleSlope && Mathf.Abs(h) > 0.01f)
         {
             rb.linearVelocity += new Vector2(0.75f * Mathf.Sign(h), 0.05f);
@@ -118,14 +118,16 @@ public class BallController : MonoBehaviour
         {
             rb.gravityScale = 1;
             rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+            onTriangleSlope = false;
 
-            if (isGrounded)
+            if (isGrounded || jumpManuallyThisFrame)
             {
                 if (jumpSound != null && audioSource != null)
                     audioSource.PlayOneShot(jumpSound);
 
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpPower);
                 isGrounded = false;
+                jumpManuallyThisFrame = false;
             }
         }
     }
@@ -226,6 +228,7 @@ public class BallController : MonoBehaviour
         {
             waterContactCount = Mathf.Max(0, waterContactCount - 1);
             isOnWaterBottom = false;
+            onTriangleSlope = false;
         }
     }
 
@@ -233,22 +236,20 @@ public class BallController : MonoBehaviour
     {
         if (isDead) return;
 
-        if (col.gameObject.GetComponent<BugBlockDamage>() != null &&
-            !bugTouched.Contains(col.gameObject))
+        if (col.gameObject.GetComponent<BugBlockDamage>() != null && !bugTouched.Contains(col.gameObject))
         {
             bugTouched.Add(col.gameObject);
             TakeDamage();
         }
 
-        if (!sunHitProcessed &&
-            col.gameObject.CompareTag("BounceBlock") &&
-            col.gameObject.name == "태양블록" &&
-            growthStage < 7)
+        if (!sunHitProcessed && col.gameObject.CompareTag("BounceBlock") && col.gameObject.name == "태양블록" && growthStage < 7)
         {
             sunHitProcessed = true;
             int steps = waterEverContact ? 2 : 1;
             for (int i = 0; i < steps && growthStage < 7; i++)
                 GrowOneStage();
+
+            jumpManuallyThisFrame = true;
             return;
         }
 
@@ -268,22 +269,34 @@ public class BallController : MonoBehaviour
             return;
         }
 
-        if (!isInWater && col.gameObject.CompareTag("TriangleBlock"))
+        if (col.gameObject.CompareTag("TriangleBlock"))
         {
             onTriangleSlope = false;
+
+            bool isActuallyInWater = false;
+            Collider2D[] overlaps = Physics2D.OverlapCircleAll(transform.position, 0.05f);
+            foreach (var hit in overlaps)
+            {
+                if (hit.CompareTag("물블록"))
+                {
+                    isActuallyInWater = true;
+                    break;
+                }
+            }
+
             foreach (var ct in col.contacts)
+            {
                 if (ct.normal.y > 0.01f && Mathf.Abs(ct.normal.x) > 0.01f)
                 {
                     isGrounded = true;
-                    onTriangleSlope = true;
+                    onTriangleSlope = isActuallyInWater;
                     break;
                 }
+            }
             return;
         }
 
-        if (!isInWater &&
-           (col.gameObject.CompareTag("흙블록") ||
-            col.gameObject.CompareTag("BounceBlock")))
+        if (!isInWater && (col.gameObject.CompareTag("흙블록") || col.gameObject.CompareTag("BounceBlock")))
         {
             Bounds b = col.collider.bounds;
             foreach (var ct in col.contacts)
@@ -299,8 +312,7 @@ public class BallController : MonoBehaviour
 
     void OnCollisionExit2D(Collision2D col)
     {
-        if (col.gameObject.CompareTag("BounceBlock") &&
-            col.gameObject.name == "태양블록")
+        if (col.gameObject.CompareTag("BounceBlock") && col.gameObject.name == "태양블록")
         {
             sunHitProcessed = false;
         }
@@ -317,10 +329,7 @@ public class BallController : MonoBehaviour
             rb.gravityScale = 1;
         }
 
-        if (!isInWater &&
-           (col.gameObject.CompareTag("흙블록") ||
-            col.gameObject.CompareTag("BounceBlock") ||
-            col.gameObject.CompareTag("TriangleBlock")))
+        if (!isInWater && (col.gameObject.CompareTag("흙블록") || col.gameObject.CompareTag("BounceBlock") || col.gameObject.CompareTag("TriangleBlock")))
         {
             isGrounded = false;
         }
