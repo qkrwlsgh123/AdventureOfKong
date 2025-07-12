@@ -180,8 +180,8 @@ MonoBehaviour:
   - {fileID: 387036382, guid: 0e37309605e3a3c4d88e37d8eafb9890, type: 3}
   - {fileID: -1688325761, guid: 0e37309605e3a3c4d88e37d8eafb9890, type: 3}
   growthRenderer: {fileID: 4395764122365842393}
-  minSpeedFactor: 0.667
-  minJumpFactor: 0.667
+  minSpeedFactor: 0.8
+  minJumpFactor: 0.8
   baseHealth: 3
   gameOverUI: {fileID: 0}
   splashEffectPrefab: {fileID: 5024211100764587426, guid: 9a67f4a88ddb86d4ebf5d5a147bf2cad, type: 3}

@@ -2856,6 +2856,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PoopItem
       objectReference: {fileID: 0}
+    - target: {fileID: 3411420940059742991, guid: c912c0f953f7adc44836933714a3d477, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4485807823967996126, guid: c912c0f953f7adc44836933714a3d477, type: 3}
       propertyPath: m_LocalPosition.x
       value: -7.5

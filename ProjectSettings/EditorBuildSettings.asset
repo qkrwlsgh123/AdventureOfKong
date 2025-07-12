@@ -53,6 +53,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Forest Map/Map0_Stage12.unity
     guid: afff4842d1044324385c197023b3591b
+  - enabled: 1
+    path: Assets/Scenes/Forest Map/Map0_Stage13.unity
+    guid: 9637a877a69275d4bb7a4221277597e9
+  - enabled: 1
+    path: Assets/Scenes/Forest Map/Map0_Stage14.unity
+    guid: 8c6ab9aa09879f8409004c59da529fb0
+  - enabled: 1
+    path: Assets/Scenes/Forest Map/Map0_Stage15.unity
+    guid: 4e1c95c4306af904a8e7a20dd7c4165d
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

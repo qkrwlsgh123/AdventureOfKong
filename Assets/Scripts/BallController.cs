@@ -55,8 +55,9 @@ public class BallController : MonoBehaviour
     private int growthStage = 0;
     private float initialSpeed, initialJump;
 
-    private bool sunHitProcessed = false;
     private HashSet<GameObject> bugTouched = new HashSet<GameObject>();
+    private GameObject lastSunBlockTouched = null;
+    private GameObject currentSunBlock = null;
 
     public int CurrentHealth { get { return currentHealth; } }
 
@@ -242,14 +243,28 @@ public class BallController : MonoBehaviour
             TakeDamage();
         }
 
-        if (!sunHitProcessed && col.gameObject.CompareTag("BounceBlock") && col.gameObject.name == "태양블록" && growthStage < 7)
+        if (col.gameObject.CompareTag("BounceBlock") && col.gameObject.name.Contains("태양블록") && growthStage < 7)
         {
-            sunHitProcessed = true;
-            int steps = waterEverContact ? 2 : 1;
-            for (int i = 0; i < steps && growthStage < 7; i++)
-                GrowOneStage();
+            if (currentSunBlock != col.gameObject)
+            {
+                currentSunBlock = col.gameObject;
 
-            jumpManuallyThisFrame = true;
+                int steps = waterEverContact ? 2 : 1;
+                for (int i = 0; i < steps && growthStage < 7; i++)
+                    GrowOneStage();
+            }
+
+            // 점프 조건: 윗면 충돌 시에만 isGrounded 적용
+            Bounds b = col.collider.bounds;
+            foreach (var ct in col.contacts)
+            {
+                if (ct.normal.y > 0.5f && ct.point.y >= b.max.y - 0.01f)
+                {
+                    isGrounded = true;
+                    jumpManuallyThisFrame = true;
+                    break;
+                }
+            }
             return;
         }
 
@@ -312,14 +327,14 @@ public class BallController : MonoBehaviour
 
     void OnCollisionExit2D(Collision2D col)
     {
-        if (col.gameObject.CompareTag("BounceBlock") && col.gameObject.name == "태양블록")
-        {
-            sunHitProcessed = false;
-        }
-
         if (col.gameObject.GetComponent<BugBlockDamage>() != null)
         {
             bugTouched.Remove(col.gameObject);
+        }
+
+        if (col.gameObject.name.Contains("태양블록"))
+        {
+            currentSunBlock = null;
         }
 
         if (isInWater && col.gameObject.CompareTag("WaterBottom"))
