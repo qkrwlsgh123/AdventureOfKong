@@ -25,6 +25,9 @@ public class BallController : MonoBehaviour
     [Header("Game Over UI")]
     public GameOverUIScript gameOverUI;
 
+    [Header("Clear UI")]
+    public GameObject clearCanvas;
+
     [Header("물 이펙트 설정")]
     public GameObject splashEffectPrefab;
     public AudioClip waterSplashSound;
@@ -45,7 +48,6 @@ public class BallController : MonoBehaviour
     private bool isDead = false;
     private bool isPausedByEogkka = false;
     private bool onTriangleSlope = false;
-    private bool jumpManuallyThisFrame = false;
 
     private int waterContactCount = 0;
     private bool waterEverContact = false;
@@ -55,9 +57,11 @@ public class BallController : MonoBehaviour
     private int growthStage = 0;
     private float initialSpeed, initialJump;
 
+    private HashSet<GameObject> usedSunBlocks = new HashSet<GameObject>();
     private HashSet<GameObject> bugTouched = new HashSet<GameObject>();
-    private GameObject lastSunBlockTouched = null;
-    private GameObject currentSunBlock = null;
+
+    private int totalPoopCount;
+    private int poopCollected = 0;
 
     public int CurrentHealth { get { return currentHealth; } }
 
@@ -74,6 +78,11 @@ public class BallController : MonoBehaviour
         currentHealth = maxHealth;
 
         UpdateGrowthVisual();
+    }
+
+    void Start()
+    {
+        totalPoopCount = GameObject.FindGameObjectsWithTag("Poop").Length;
     }
 
     void Update()
@@ -119,16 +128,14 @@ public class BallController : MonoBehaviour
         {
             rb.gravityScale = 1;
             rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-            onTriangleSlope = false;
 
-            if (isGrounded || jumpManuallyThisFrame)
+            if (isGrounded)
             {
                 if (jumpSound != null && audioSource != null)
                     audioSource.PlayOneShot(jumpSound);
 
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpPower);
                 isGrounded = false;
-                jumpManuallyThisFrame = false;
             }
         }
     }
@@ -165,8 +172,26 @@ public class BallController : MonoBehaviour
         if (currentHealth <= 0)
         {
             isDead = true;
-            gameOverUI.ShowGameOver();
+            if (!GameManager.IsStageCleared)
+                gameOverUI?.ShowGameOver();
         }
+    }
+
+    public void RegisterPoopCollected()
+    {
+        poopCollected++;
+
+        if (poopCollected >= totalPoopCount)
+        {
+            GameManager.IsStageCleared = true;
+            StartCoroutine(DelayedShowClearUI());
+        }
+    }
+
+    IEnumerator DelayedShowClearUI()
+    {
+        yield return new WaitForSeconds(1f);
+        clearCanvas?.SetActive(true);
     }
 
     public void PlayPoopEatSound()
@@ -218,6 +243,12 @@ public class BallController : MonoBehaviour
 
         if (other.CompareTag("DeathZone") && !isDead)
         {
+            if (GameManager.IsStageCleared)
+            {
+                Debug.Log("✅ 클리어 상태이므로 GameOver 무시됨");
+                return;
+            }
+
             isDead = true;
             gameOverUI?.ShowGameOver();
         }
@@ -229,7 +260,6 @@ public class BallController : MonoBehaviour
         {
             waterContactCount = Mathf.Max(0, waterContactCount - 1);
             isOnWaterBottom = false;
-            onTriangleSlope = false;
         }
     }
 
@@ -243,29 +273,15 @@ public class BallController : MonoBehaviour
             TakeDamage();
         }
 
-        if (col.gameObject.CompareTag("BounceBlock") && col.gameObject.name.Contains("태양블록") && growthStage < 7)
+        if (col.gameObject.CompareTag("BounceBlock") && col.gameObject.name.Contains("태양"))
         {
-            if (currentSunBlock != col.gameObject)
+            if (!usedSunBlocks.Contains(col.gameObject) && growthStage < 7)
             {
-                currentSunBlock = col.gameObject;
-
+                usedSunBlocks.Add(col.gameObject);
                 int steps = waterEverContact ? 2 : 1;
                 for (int i = 0; i < steps && growthStage < 7; i++)
                     GrowOneStage();
             }
-
-            // 점프 조건: 윗면 충돌 시에만 isGrounded 적용
-            Bounds b = col.collider.bounds;
-            foreach (var ct in col.contacts)
-            {
-                if (ct.normal.y > 0.5f && ct.point.y >= b.max.y - 0.01f)
-                {
-                    isGrounded = true;
-                    jumpManuallyThisFrame = true;
-                    break;
-                }
-            }
-            return;
         }
 
         if (isInWater && col.gameObject.CompareTag("WaterBottom"))
@@ -284,27 +300,15 @@ public class BallController : MonoBehaviour
             return;
         }
 
-        if (col.gameObject.CompareTag("TriangleBlock"))
+        if (!isInWater && col.gameObject.CompareTag("TriangleBlock"))
         {
             onTriangleSlope = false;
-
-            bool isActuallyInWater = false;
-            Collider2D[] overlaps = Physics2D.OverlapCircleAll(transform.position, 0.05f);
-            foreach (var hit in overlaps)
-            {
-                if (hit.CompareTag("물블록"))
-                {
-                    isActuallyInWater = true;
-                    break;
-                }
-            }
-
             foreach (var ct in col.contacts)
             {
                 if (ct.normal.y > 0.01f && Mathf.Abs(ct.normal.x) > 0.01f)
                 {
                     isGrounded = true;
-                    onTriangleSlope = isActuallyInWater;
+                    onTriangleSlope = true;
                     break;
                 }
             }
@@ -327,14 +331,14 @@ public class BallController : MonoBehaviour
 
     void OnCollisionExit2D(Collision2D col)
     {
+        if (col.gameObject.CompareTag("BounceBlock") && col.gameObject.name.Contains("태양"))
+        {
+            usedSunBlocks.Remove(col.gameObject);
+        }
+
         if (col.gameObject.GetComponent<BugBlockDamage>() != null)
         {
             bugTouched.Remove(col.gameObject);
-        }
-
-        if (col.gameObject.name.Contains("태양블록"))
-        {
-            currentSunBlock = null;
         }
 
         if (isInWater && col.gameObject.CompareTag("WaterBottom"))

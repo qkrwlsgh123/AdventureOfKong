@@ -929,10 +929,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenuUI: {fileID: 763115142884368095}
-  clearUI: {fileID: 5943478731263909172}
   resumeButton: {fileID: 4300982706254159308}
   exitButton: {fileID: 7412362755977821072}
-  restartFromBeginningButton: {fileID: 0}
+  restartFromBeginningButton: {fileID: 5332547462255494535}
 --- !u!1 &2450443592310585465
 GameObject:
   m_ObjectHideFlags: 0
@@ -1514,7 +1513,7 @@ Transform:
   m_GameObject: {fileID: 2817317661896490862}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.72367, y: -0.92617, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2814,7 +2813,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   birdPrefab: {fileID: 1250870723319147898, guid: b2d7ca7d7980eed4dbfaa225c9811401, type: 3}
-  spawnChance: 0.001
+  spawnChance: 0.01
   alwaysTrigger: 0
 --- !u!1 &7079007698541805172
 GameObject:

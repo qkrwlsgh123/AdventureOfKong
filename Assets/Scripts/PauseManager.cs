@@ -4,14 +4,10 @@ using UnityEngine.UI;
 
 public class PauseManager : MonoBehaviour
 {
-    public GameObject pauseMenuUI;   // Pause UI 전체
-    public GameObject clearUI;       // ClearCanvas 오브젝트 (Inspector에서 연결)
-
-    public Button resumeButton;
-    public Button exitButton;
-
-    // 🔹 처음부터 버튼 추가
-    public Button restartFromBeginningButton;
+    public GameObject pauseMenuUI;       // Pause UI 전체
+    public Button resumeButton;          // 재개 버튼
+    public Button exitButton;            // 나가기 버튼
+    public Button restartFromBeginningButton; // 처음부터 버튼
 
     void Start()
     {
@@ -20,40 +16,24 @@ public class PauseManager : MonoBehaviour
 
         resumeButton.onClick.AddListener(ResumeGame);
         exitButton.onClick.AddListener(ExitToStageSelection);
-
-        // 🔹 처음부터 버튼 클릭 시 현재 스테이지 다시 로드
-        restartFromBeginningButton.onClick.AddListener(RestartStageFromBeginning);
+        restartFromBeginningButton.onClick.AddListener(RestartFromBeginning);
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            // ✅ 1. ClearUI 떠 있으면 ESC 무시
-            if (GameManager.IsStageCleared &&
-                clearUI != null &&
-                clearUI.activeInHierarchy)
-            {
-                Debug.Log("❌ ClearUI 떠 있어서 ESC 무시됨");
-                return;
-            }
-
-            // ✅ 2. GameOver 상태면 ESC 무시
+            // ✅ GameOver 상태에서는 ESC 무시
             if (GameOverUIScript.IsGameOver)
             {
-                Debug.Log("❌ GameOver 상태에서 ESC 무시됨");
+                Debug.Log("❌ GameOver 상태에서는 PauseMenu 무시됨");
                 return;
             }
 
-            // ✅ 3. ESC로 PauseUI 토글
             if (pauseMenuUI != null && !pauseMenuUI.activeSelf)
-            {
                 PauseGame();
-            }
             else
-            {
                 ResumeGame();
-            }
         }
     }
 
@@ -77,10 +57,10 @@ public class PauseManager : MonoBehaviour
         SceneManager.LoadScene("StageSelection");
     }
 
-    // 🔹 현재 스테이지 처음부터 다시 시작
-    public void RestartStageFromBeginning()
+    public void RestartFromBeginning()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Scene currentScene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(currentScene.name);
     }
 }

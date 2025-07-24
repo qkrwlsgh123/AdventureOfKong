@@ -173,7 +173,7 @@ MonoBehaviour:
   growthInterval: 2
   growthSprites:
   - {fileID: 21300000, guid: f08eeb1833477e64f8f8215ce7a80e5d, type: 3}
-  - {fileID: -1805252084, guid: 0e37309605e3a3c4d88e37d8eafb9890, type: 3}
+  - {fileID: 21300000, guid: a950a9b819f1e294891bc6e26f961f26, type: 3}
   - {fileID: -202646932, guid: 0e37309605e3a3c4d88e37d8eafb9890, type: 3}
   - {fileID: -284607031, guid: 0e37309605e3a3c4d88e37d8eafb9890, type: 3}
   - {fileID: 1957980354, guid: 0e37309605e3a3c4d88e37d8eafb9890, type: 3}

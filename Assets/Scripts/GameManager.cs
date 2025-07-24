@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        // 초기화
+        // ✅ 초기화 (씬 재시작 시에도 반영)
         IsStageCleared = false;
 
         // 씬 안에 있는 모든 똥 개수 세기
@@ -40,18 +40,15 @@ public class GameManager : MonoBehaviour
     {
         collectedCount++;
 
+        // ✅ 똥 다 먹는 순간 클리어 처리
         if (collectedCount >= totalPoopCount)
         {
-            StageClear();
+            IsStageCleared = true;  // ✅ 즉시 클리어 판정
+            StartCoroutine(ShowClearUIAfterDelay(1f));  // 연출은 1초 뒤
         }
     }
 
-    // 스테이지 클리어 처리
-    void StageClear()
-    {
-        StartCoroutine(ShowClearUIAfterDelay(1f));  // 1초 후 클리어 UI 표시
-    }
-
+    // 클리어 UI 표시 (1초 지연만 담당)
     IEnumerator ShowClearUIAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
@@ -63,8 +60,6 @@ public class GameManager : MonoBehaviour
 
         if (messageText != null)
             messageText.text = "GOOD!";
-
-        IsStageCleared = true;  // ✅ 클리어 발생 시점에 true 설정
     }
 
     // 다음 스테이지로 이동
@@ -85,7 +80,6 @@ public class GameManager : MonoBehaviour
     public void RestartStage()
     {
         Time.timeScale = 1f;
-        Scene currentScene = SceneManager.GetActiveScene();
-        SceneManager.LoadScene(currentScene.name);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
